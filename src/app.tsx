@@ -104,7 +104,7 @@ function MeCard() {
             <div
                 className={"absolute inset-0 bg-gradient-to-r from-blue-200 to-purple-200 rounded-full blur-lg opacity-75 dark:from-blue-800 dark:to-purple-800"}/>
             <div class={"absolute z-10 inset-1"}>
-                <img src={"https://avatars.githubusercontent.com/u/67669799?v=4"} alt={"avatar"}
+                <img src={"/avatar.jpg"} alt={"avatar"}
                      className={"rounded-full border-4 border-white"}/>
             </div>
         </div>
