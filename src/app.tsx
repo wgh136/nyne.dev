@@ -121,24 +121,31 @@ function MeCard() {
 }
 
 function SocialLink({icon, text, url}: { icon: any, text: string, url: string }) {
-    return <div class={"rounded-lg h-10 border flex flex-row items-center cursor-pointer duration-150 " +
-        "hover:bg-gray-50 dark:border-gray-400 dark:hover:bg-gray-700 shadow-sm px-3"} onClick={() => {
-        window.open(url);
-    }}>
-        <div class={"flex items-center justify-center text-xl h-full"}>
-            {icon}
+    const [width, setWidth] = useState(window.innerWidth);
+    useEffect(() => {
+        const handleResize = () => setWidth(window.innerWidth);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    return <a href={url} target={"_blank"}>
+        <div className={"rounded-lg h-10 border flex flex-row items-center cursor-pointer duration-150 " +
+            "hover:bg-gray-50 dark:border-gray-400 dark:hover:bg-gray-700 shadow-sm px-3"}>
+            <div className={"flex items-center justify-center text-xl h-full"}>
+                {icon}
+            </div>
+            {width > 400 && <div className={"flex-grow pl-3"}>
+                {text}
+            </div>}
         </div>
-        <div class={"flex-grow pl-3"}>
-            {text}
-        </div>
-    </div>
+    </a>
 }
 
 function AboutCard() {
     return <>
         <div class={"h-6"}></div>
-        <h1 class={"w-full h-12 flex items-center text-3xl font-bold my-4 pl-8"} id={"about"}>About</h1>
-        <div className={"mx-6 bg-white shadow rounded-2xl p-6 dark:bg-gray-800"}>
+        <h1 class={"w-full h-12 flex items-center text-3xl font-bold my-4 pl-6"} id={"about"}>About</h1>
+        <div className={"mx-4 bg-white shadow rounded-2xl p-6 dark:bg-gray-800"}>
             <h2 className={"font-bold text-xl text-blue-600 mb-2 dark:text-blue-300"}>About Me</h2>
             <p>I'm a student working towards becoming a full stack engineer.</p>
             <div class={"h-4"}></div>
@@ -157,7 +164,7 @@ function AboutCard() {
 }
 
 function Badge({text}: { text: string }) {
-    return <div className={"rounded-full bg-blue-100 px-4 py-1 text-sm text-blue-600 dark:bg-blue-800 dark:text-blue-200"}>
+    return <div className={"rounded-full bg-blue-100 px-2 sm:px-4 py-0.5 sm:py-1 text-sm text-blue-600 dark:bg-blue-800 dark:text-blue-200"}>
         {text}
     </div>
 }
@@ -165,8 +172,8 @@ function Badge({text}: { text: string }) {
 function ProjectsCard() {
     return <>
         <div className={"h-6"}></div>
-        <h1 className={"w-full h-12 flex items-center text-3xl font-bold my-4 pl-8"} id={"projects"}>Projects</h1>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 px-6">
+        <h1 className={"w-full h-12 flex items-center text-3xl font-bold my-4 pl-6"} id={"projects"}>Projects</h1>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 px-4">
             <Project
                 name={"Venera"}
                 description={"A comic app built with Flutter. Supports reading comics from various sources."}
@@ -196,25 +203,26 @@ function Project({name, description, url, tags, image}: {
     name: string,
     description: string, url: string, tags: string[], image: string
 }) {
-    return <div class={"h-60 shadow bg-white rounded-2xl p-4 flex flex-grow flex-col dark:bg-gray-800"}>
-        <div class={"flex w-full"}>
-            <div class={"flex-grow pr-4"}>
-                <h2 className={"font-bold text-xl text-blue-600 mb-2 dark:text-blue-300"}>
-                    {name}
-                </h2>
-                <p>{description}</p>
-                <div class={"h-2"}></div>
-                <a href={url} className={"text-blue-600"} target={"_blank"}>View on Github</a>
+    return <a href={url} target={"_blank"}>
+        <div className={"duration-200 h-64 shadow bg-white rounded-2xl p-4 flex flex-grow flex-col dark:bg-gray-800 hover:shadow-md"}>
+            <div className={"flex w-full"}>
+                <div className={"flex-grow pr-2 sm:pr-4"}>
+                    <h2 className={"font-bold text-xl text-blue-600 mb-2 dark:text-blue-300"}>
+                        {name}
+                    </h2>
+                    <p>{description}</p>
+                    <div className={"h-2"}></div>
+                </div>
+                <div className={"flex-shrink-0 w-14 min-[340px]:w-20 sm:w-24"}>
+                    <img src={image} alt={name} className={"rounded"}/>
+                </div>
             </div>
-            <div class={"flex-shrink-0 w-24"}>
-                <img src={image} alt={name} class={"rounded"}/>
+            <div className={"flex-grow"}></div>
+            <div className={"flex flex-wrap gap-1 sm:gap-2"}>
+                {tags.map(tag => <Badge text={tag}/>)}
             </div>
         </div>
-        <div class={"flex-grow"}></div>
-        <div class={"flex flex-wrap gap-2"}>
-            {tags.map(tag => <Badge text={tag}/>)}
-        </div>
-    </div>
+    </a>
 }
 
 interface Post {
@@ -235,8 +243,8 @@ function BlogPart() {
 
     return <>
         <div className={"h-6"}></div>
-        <h1 className={"w-full h-12 flex items-center text-3xl font-bold my-4 pl-8"} id={"blog"}>Blog</h1>
-        <div class={"px-6"}>
+        <h1 className={"w-full h-12 flex items-center text-3xl font-bold my-4 pl-6"} id={"blog"}>Blog</h1>
+        <div class={"px-4"}>
             {posts === null && <div class={"h-12 w-full flex items-center justify-center"}>
                 <Loading/>
             </div>}
@@ -249,7 +257,7 @@ function BlogPart() {
 }
 
 function PostCard({post}: {post: Post}) {
-    return <a href={`https://note.nyne.dev/post/${post.postID}`} target={"_blank"}>
+    return <a href={`https://note.nyne.dev/public/article/${post.postID}`} target={"_blank"}>
         <div className={"shadow w-full p-4 bg-white rounded-2xl my-4 hover:shadow-md duration-200 dark:bg-gray-800"}>
             <MarkdownWidget content={post.content}></MarkdownWidget>
         </div>
